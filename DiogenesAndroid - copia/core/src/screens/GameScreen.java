@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
+import java.util.ArrayList;
+
+import entities.Bullet;
+
 public class GameScreen implements Screen {
 
 
@@ -33,6 +37,7 @@ public class GameScreen implements Screen {
     int roll;
 
 
+    ArrayList<Bullet> bullets;
     JuegoDiogenesVersionFail game;
 
     public GameScreen(JuegoDiogenesVersionFail game){
@@ -50,6 +55,8 @@ public class GameScreen implements Screen {
         rolls[3] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[3]);
         rolls[4] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[4]);//Right
 
+        bullets = new ArrayList<Bullet>();
+
 
     }
 
@@ -63,21 +70,45 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        //Shooting code
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            bullets.add(new Bullet(x + 4));
+            bullets.add(new Bullet(x + SHIP_WIDTH - 4));
+
+        }
+
+        //Update bullets
+        ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
+        for (Bullet bullet : bullets) {
+            bullet.update(delta);
+            if (bullet.remove)
+                bulletsToRemove.add(bullet);
+        }
+        bullets.removeAll(bulletsToRemove);
+
+
+        //Movement code
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             x -=  SPEED * Gdx.graphics.getDeltaTime();
             if (x < 0)
                 x = 0;
 
+
+            //Update roll if button just clicked
+            if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && !Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && roll > 0){
+                rollTimer = 0;
+                roll--;
+
+            }
+
             //update the roll
 
             rollTimer -= Gdx.graphics.getDeltaTime();
 
-            if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME) {
+            if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll > 0) {
                 rollTimer -= 0;
                 roll--;
 
-                if(roll < 0)
-                    roll = 0;
             }
 
         }else{
@@ -85,17 +116,15 @@ public class GameScreen implements Screen {
                 //update the roll
                 rollTimer += Gdx.graphics.getDeltaTime();
 
-                if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME) {
+                if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll < 4) {
                     rollTimer -= 0;
                     roll++;
 
-                    if(roll > 4)
-                        roll = 4;
                 }
             }
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+        if( Gdx.input.isKeyPressed(Input.Keys.RIGHT) ){
             x +=  SPEED * Gdx.graphics.getDeltaTime();
             if (x + SHIP_WIDTH > JuegoDiogenesVersionFail.WIDTH)
                 x = JuegoDiogenesVersionFail.WIDTH - SHIP_WIDTH;
@@ -103,27 +132,20 @@ public class GameScreen implements Screen {
             //update the roll
             rollTimer += Gdx.graphics.getDeltaTime();
 
-            if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME) {
+            if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll < 4) {
                 rollTimer -= 0;
                 roll++;
 
-                if(roll > 4)
-                    roll = 4;
             }
 
         }else{
             if(roll >2){
-
                 //update the roll
-
                 rollTimer -= Gdx.graphics.getDeltaTime();
 
-                if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME) {
+                if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll > 0) {
                     rollTimer -= 0;
                     roll--;
-
-                    if(roll < 0)
-                        roll = 0;
                 }
             }
         }
@@ -134,6 +156,10 @@ public class GameScreen implements Screen {
         stateTime += delta;
 
         game.batch.begin();
+
+        for (Bullet bullet : bullets) {
+            bullet.render(game.batch);
+        }
         game.batch.draw((TextureRegion) rolls[roll].getKeyFrame(stateTime, true), x, y, SHIP_WIDTH, SHIP_HEIGHT);
 
         game.batch.end();
