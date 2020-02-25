@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 
 
+import world.CustomGameMap;
 import world.GameMap;
 import world.TileType;
 import world.TiledGameMap;
@@ -22,6 +23,11 @@ public class JuegoDiogenesVersionFail extends Game {
 
 	@Override
 	public void create () {
+
+		/**
+		 * Si queremos el mapa que hemos creado nosotros desde el tmx Creamos un TiledGameMap, si queremos el que hemos creado a partir del codigo
+		 * hacemos un new CustomGameMap(), el juego irá por defecto con el mapa ya creado a partir del tmx
+		 */
 		gameMap = new TiledGameMap();
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
