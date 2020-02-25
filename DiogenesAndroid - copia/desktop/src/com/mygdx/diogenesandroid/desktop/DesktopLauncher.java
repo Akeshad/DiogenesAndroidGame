@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.width = 600;
 		config.height = 400;
 		config.vSyncEnabled = true;
+		config.foregroundFPS = 60;
 		new LwjglApplication(new JuegoDiogenesVersionFail(), config);
 	}
 }
