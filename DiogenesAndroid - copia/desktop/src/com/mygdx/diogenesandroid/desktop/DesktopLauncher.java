@@ -7,10 +7,11 @@ import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 600;
-		config.height = 400;
+		config.width = JuegoDiogenesVersionFail.WIDTH;
+		config.height = JuegoDiogenesVersionFail.HEIGHT;
 		config.vSyncEnabled = true;
 		config.foregroundFPS = 60;
+		config.resizable = false;
 		new LwjglApplication(new JuegoDiogenesVersionFail(), config);
 	}
 }

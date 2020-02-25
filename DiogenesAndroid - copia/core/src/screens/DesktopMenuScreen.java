@@ -11,6 +11,13 @@ import sun.security.krb5.internal.crypto.Des;
 public class DesktopMenuScreen implements Screen {
 
 
+    private static final int EXIT_BUTTON_WIDTH = 250;
+    private static final int EXIT_BUTTON_HEIGHT = 120;
+    private static final int PLAY_BUTTON_WIDTH = 300;
+    private static final int PLAY_BUTTON_HEIGHT = 120;
+    private static final int EXIT_BUTTON_Y = 100;
+    private static final int PLAY_BUTTON_Y = 230;
+
     JuegoDiogenesVersionFail game;
 
     Texture playButtonActive;
@@ -34,10 +41,33 @@ public class DesktopMenuScreen implements Screen {
     public void render(float delta) {
 
 
-        Gdx.gl.glClearColor(1,0,0,1);
+        Gdx.gl.glClearColor(0.3f,0.3f,0.3f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
+
+        int x = JuegoDiogenesVersionFail.WIDTH / 2 - EXIT_BUTTON_WIDTH / 2;
+        if(Gdx.input.getX() < x + EXIT_BUTTON_WIDTH && Gdx.input.getX() > x && JuegoDiogenesVersionFail.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT && JuegoDiogenesVersionFail.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y){
+            game.batch.draw(exitButtonActive,x,EXIT_BUTTON_Y,EXIT_BUTTON_WIDTH,EXIT_BUTTON_HEIGHT);
+            if(Gdx.input.isTouched()){
+                Gdx.app.exit();
+            }
+        }else{
+            game.batch.draw(exitButtonInactive,x,EXIT_BUTTON_Y,EXIT_BUTTON_WIDTH,EXIT_BUTTON_HEIGHT);
+        }
+
+        x = JuegoDiogenesVersionFail.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
+
+        if(Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && JuegoDiogenesVersionFail.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && JuegoDiogenesVersionFail.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y){
+            game.batch.draw(playButtonActive,x,PLAY_BUTTON_Y,PLAY_BUTTON_WIDTH,PLAY_BUTTON_HEIGHT);
+            if(Gdx.input.isTouched()){
+                this.dispose();
+                game.setScreen(new GameScreen(game));
+            }
+        }else{
+            game.batch.draw(playButtonInactive,x,PLAY_BUTTON_Y,PLAY_BUTTON_WIDTH,PLAY_BUTTON_HEIGHT);
+        }
+
         game.batch.end();
 
 
