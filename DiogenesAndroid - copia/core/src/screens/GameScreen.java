@@ -6,12 +6,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import entities.Asteroid;
 import entities.Bullet;
+import tools.CollisionRect;
 
 public class GameScreen implements Screen {
 
@@ -19,13 +24,18 @@ public class GameScreen implements Screen {
     public static final float SPEED = 300;
 
     public static final float SHIP_ANIMATION_SPEED = 0.5f;
+
     public static final float ROLL_TIMER_SWITCH_TIME = 0.25f;//How much time it takes between each roll of the ship
+    public static final float SHOOT_WAIT_TIME = 0.3f;
 
     public static final int SHIP_WIDTH_PIXEL = 17;
     public static final int SHIP_HEIGHT_PIXEL = 32;
 
     public static final int SHIP_WIDTH = SHIP_WIDTH_PIXEL * 3;
     public static final int SHIP_HEIGHT = SHIP_HEIGHT_PIXEL * 3;
+
+    public static final float MIN_ASTEROID_SPAWN_TIME = 0.05f;//This is going to be the minimum time that the game have to wait to spawn an asteroid
+    public static final float MAX_ASTEROID_SPAWN_TIME = 0.1f;//This is going to be the maximum time that the game have to wait to spawn an asteroid
 
 
     Animation[] rolls;
@@ -35,15 +45,35 @@ public class GameScreen implements Screen {
     float stateTime; // How long an animation is being running
     float rollTimer; //Actual time that is taking to roll
     int roll;
+    float shootTimer;
+    float asteroidSpawnTimer; // timer for the asteroid
+    BitmapFont scoreFont;
+    Random random;
+    int score;
 
+    CollisionRect playerRect;
 
     ArrayList<Bullet> bullets;
+    ArrayList<Asteroid> asteroids;
+
     JuegoDiogenesVersionFail game;
 
     public GameScreen(JuegoDiogenesVersionFail game){
         this.game = game;
         y = 15;
         x = JuegoDiogenesVersionFail.WIDTH / 2 - SHIP_WIDTH / 2;
+        scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"));
+        score = 0;
+
+        asteroids = new ArrayList<Asteroid>();
+        bullets = new ArrayList<Bullet>();
+        playerRect = new CollisionRect(0, 0, SHIP_WIDTH, SHIP_HEIGHT);
+
+        shootTimer = 0;
+
+        random = new Random();
+        asteroidSpawnTimer = random.nextFloat() * (MAX_ASTEROID_SPAWN_TIME - MIN_ASTEROID_SPAWN_TIME) + MIN_ASTEROID_SPAWN_TIME;//This is going to generate a num between 0 and 0.3 and then we add 0.3 to it
+
         roll = 2;
         rollTimer = 0;
         rolls = new Animation[5];
@@ -55,7 +85,7 @@ public class GameScreen implements Screen {
         rolls[3] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[3]);
         rolls[4] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[4]);//Right
 
-        bullets = new ArrayList<Bullet>();
+
 
 
     }
@@ -70,12 +100,41 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        //Shooting code
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            bullets.add(new Bullet(x + 4));
-            bullets.add(new Bullet(x + SHIP_WIDTH - 4));
+        shootTimer += delta;
 
+        //Shooting code
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && shootTimer >= SHOOT_WAIT_TIME){
+            shootTimer = 0;
+
+            int offSet = 4;
+            if (roll == 1 || roll == 3)//Slightly tilted
+                offSet = 8;
+
+            if (roll == 0 || roll == 4)//Fully tilted
+                offSet = 16;
+
+            bullets.add(new Bullet(x + offSet));
+            bullets.add(new Bullet(x + SHIP_WIDTH - offSet));
         }
+
+
+        //Adding asteroids spawns
+        asteroidSpawnTimer -= delta;
+        if (asteroidSpawnTimer <= 0) { //if this hanpends we need to reset it and create new asteroids
+
+            asteroidSpawnTimer = random.nextFloat() * (MAX_ASTEROID_SPAWN_TIME - MIN_ASTEROID_SPAWN_TIME) + MIN_ASTEROID_SPAWN_TIME;
+
+            asteroids.add(new Asteroid(random.nextInt(JuegoDiogenesVersionFail.WIDTH - Asteroid.WIDTH))); //the asteroid is going to spawn from a random number around the width os the screen
+        }
+
+        //Updating asteroids
+        ArrayList<Asteroid> asteroidsToRemove = new ArrayList<Asteroid>();
+        for (Asteroid asteroid : asteroids) {
+            asteroid.update(delta);
+            if (asteroid.remove)
+                asteroidsToRemove.add(asteroid);
+        }
+
 
         //Update bullets
         ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
@@ -84,7 +143,7 @@ public class GameScreen implements Screen {
             if (bullet.remove)
                 bulletsToRemove.add(bullet);
         }
-        bullets.removeAll(bulletsToRemove);
+
 
 
         //Movement code
@@ -106,7 +165,7 @@ public class GameScreen implements Screen {
             rollTimer -= Gdx.graphics.getDeltaTime();
 
             if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll > 0) {
-                rollTimer -= 0;
+                rollTimer -= ROLL_TIMER_SWITCH_TIME;
                 roll--;
 
             }
@@ -117,7 +176,7 @@ public class GameScreen implements Screen {
                 rollTimer += Gdx.graphics.getDeltaTime();
 
                 if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll < 4) {
-                    rollTimer -= 0;
+                    rollTimer -= ROLL_TIMER_SWITCH_TIME;
                     roll++;
 
                 }
@@ -125,15 +184,23 @@ public class GameScreen implements Screen {
         }
 
         if( Gdx.input.isKeyPressed(Input.Keys.RIGHT) ){
+
             x +=  SPEED * Gdx.graphics.getDeltaTime();
             if (x + SHIP_WIDTH > JuegoDiogenesVersionFail.WIDTH)
                 x = JuegoDiogenesVersionFail.WIDTH - SHIP_WIDTH;
+
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && roll > 0){
+                rollTimer = 0;
+                roll--;
+
+            }
 
             //update the roll
             rollTimer += Gdx.graphics.getDeltaTime();
 
             if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll < 4) {
-                rollTimer -= 0;
+                rollTimer -= ROLL_TIMER_SWITCH_TIME;
                 roll++;
 
             }
@@ -144,21 +211,50 @@ public class GameScreen implements Screen {
                 rollTimer -= Gdx.graphics.getDeltaTime();
 
                 if (Math.abs(rollTimer) > ROLL_TIMER_SWITCH_TIME && roll > 0) {
-                    rollTimer -= 0;
+                    rollTimer -= ROLL_TIMER_SWITCH_TIME;
                     roll--;
                 }
             }
         }
 
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //After player moves, update collision rect
+        playerRect.move(x, y);
+
+        //After all updates, check for collisions
+        for (Bullet bullet : bullets) {
+
+            for (Asteroid asteroid : asteroids) {
+
+                if (bullet.getCollisionRect().collidesWith(asteroid.getCollisionRect())) {//Collision occured
+                    bulletsToRemove.add(bullet);
+                    asteroidsToRemove.add(asteroid);
+                    score += 10;
+                }
+            }
+        }
+
+        bullets.removeAll(bulletsToRemove);
+        asteroids.removeAll(asteroidsToRemove);
 
         stateTime += delta;
 
+
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         game.batch.begin();
+
+        GlyphLayout scoreLayout = new GlyphLayout(scoreFont, "" + score);
+        scoreFont.draw(game.batch, scoreLayout, JuegoDiogenesVersionFail.WIDTH / 2 - scoreLayout.width / 2,
+                JuegoDiogenesVersionFail.HEIGHT - scoreLayout.height - 10);
 
         for (Bullet bullet : bullets) {
             bullet.render(game.batch);
+        }
+
+        for (Asteroid asteroid : asteroids) {
+            asteroid.render(game.batch);
         }
         game.batch.draw((TextureRegion) rolls[roll].getKeyFrame(stateTime, true), x, y, SHIP_WIDTH, SHIP_HEIGHT);
 
