@@ -97,6 +97,8 @@ public class GameScreen implements Screen {
         rolls[3] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[3]);
         rolls[4] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[4]);//Right
 
+
+
         music = JuegoDiogenesVersionFail.manager.get("music.mp3", Music.class);
         music.setLooping(true);
         music.play();
@@ -117,7 +119,7 @@ public class GameScreen implements Screen {
         shootTimer += delta;
 
         //Shooting code
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && shootTimer >= SHOOT_WAIT_TIME){
+        if((isRight() || isLeft())  && shootTimer >= SHOOT_WAIT_TIME){
             shootTimer = 0;
 
             int offSet = 4;
@@ -170,14 +172,14 @@ public class GameScreen implements Screen {
 
 
         //Movement code
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+        if(isLeft()){
             x -=  SPEED * Gdx.graphics.getDeltaTime();
             if (x < 0)
                 x = 0;
 
 
             //Update roll if button just clicked
-            if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && !Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && roll > 0){
+            if(isJustLeft() && !isRight() && roll > 0){
                 rollTimer = 0;
                 roll--;
 
@@ -206,14 +208,14 @@ public class GameScreen implements Screen {
             }
         }
 
-        if( Gdx.input.isKeyPressed(Input.Keys.RIGHT) ){
+        if( isRight() ){
 
             x +=  SPEED * Gdx.graphics.getDeltaTime();
             if (x + SHIP_WIDTH > JuegoDiogenesVersionFail.WIDTH)
                 x = JuegoDiogenesVersionFail.WIDTH - SHIP_WIDTH;
 
 
-            if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && roll > 0){
+            if(isJustRight() && !isLeft() && roll > 0){
                 rollTimer = 0;
                 roll--;
 
@@ -283,6 +285,8 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
 
+        game.scrollingBackground.updateAndRender(delta, game.batch);
+
         GlyphLayout scoreLayout = new GlyphLayout(scoreFont, "" + score);
         scoreFont.draw(game.batch, scoreLayout, JuegoDiogenesVersionFail.WIDTH / 2 - scoreLayout.width / 2,
                 JuegoDiogenesVersionFail.HEIGHT - scoreLayout.height - 10);
@@ -317,10 +321,32 @@ public class GameScreen implements Screen {
 
     }
 
+
+    private boolean isRight () {
+        return Gdx.input.isKeyPressed(Input.Keys.RIGHT) || (Gdx.input.isTouched() && Gdx.input.getX() >= JuegoDiogenesVersionFail.WIDTH / 2);
+    }
+
+    private boolean isLeft () {
+        return Gdx.input.isKeyPressed(Input.Keys.LEFT) || (Gdx.input.isTouched() &&  Gdx.input.getX() < JuegoDiogenesVersionFail.WIDTH / 2);
+    }
+
+    private boolean isJustRight () {
+        return Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || (Gdx.input.justTouched() && Gdx.input.getX() >= JuegoDiogenesVersionFail.WIDTH / 2);
+    }
+
+    private boolean isJustLeft () {
+        return Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || (Gdx.input.justTouched() &&  Gdx.input.getX()< JuegoDiogenesVersionFail.WIDTH / 2);
+    }
+
+
+
+
     @Override
     public void resize(int width, int height) {
 
     }
+
+
 
     @Override
     public void pause() {

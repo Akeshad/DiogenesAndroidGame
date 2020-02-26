@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
+import tools.ScrollingBackground;
+
 public class GameOverScreen implements Screen {
 
     private static final int BANNER_WIDTH = 350;
@@ -41,6 +43,8 @@ public class GameOverScreen implements Screen {
         gameOverBanner = new Texture("game_over.png");
         scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"));
 
+
+
     }
 
     @Override
@@ -51,6 +55,9 @@ public class GameOverScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
+
+
+        game.scrollingBackground.updateAndRender(delta, game.batch);
 
         game.batch.draw(gameOverBanner, JuegoDiogenesVersionFail.WIDTH / 2 - BANNER_WIDTH / 2, JuegoDiogenesVersionFail.HEIGHT - BANNER_HEIGHT - 15, BANNER_WIDTH, BANNER_HEIGHT);
 
