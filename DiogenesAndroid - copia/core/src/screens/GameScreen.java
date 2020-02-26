@@ -3,6 +3,8 @@ package screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -16,6 +18,7 @@ import java.util.Random;
 
 import entities.Asteroid;
 import entities.Bullet;
+import entities.Explosions;
 import tools.CollisionRect;
 
 public class GameScreen implements Screen {
@@ -34,8 +37,8 @@ public class GameScreen implements Screen {
     public static final int SHIP_WIDTH = SHIP_WIDTH_PIXEL * 3;
     public static final int SHIP_HEIGHT = SHIP_HEIGHT_PIXEL * 3;
 
-    public static final float MIN_ASTEROID_SPAWN_TIME = 0.05f;//This is going to be the minimum time that the game have to wait to spawn an asteroid
-    public static final float MAX_ASTEROID_SPAWN_TIME = 0.1f;//This is going to be the maximum time that the game have to wait to spawn an asteroid
+    public static final float MIN_ASTEROID_SPAWN_TIME = 0.03f;//This is going to be the minimum time that the game have to wait to spawn an asteroid
+    public static final float MAX_ASTEROID_SPAWN_TIME = 0.6f;//This is going to be the maximum time that the game have to wait to spawn an asteroid
 
 
     Animation[] rolls;
@@ -48,13 +51,19 @@ public class GameScreen implements Screen {
     float shootTimer;
     float asteroidSpawnTimer; // timer for the asteroid
     BitmapFont scoreFont;
-    Random random;
+
+
     int score;
+    float health = 1;//0 = dead, 1 = full health
+    Texture blank;
 
     CollisionRect playerRect;
+    Random random;
 
     ArrayList<Bullet> bullets;
     ArrayList<Asteroid> asteroids;
+    ArrayList<Explosions> explosions;
+    private Music music;
 
     JuegoDiogenesVersionFail game;
 
@@ -64,9 +73,12 @@ public class GameScreen implements Screen {
         x = JuegoDiogenesVersionFail.WIDTH / 2 - SHIP_WIDTH / 2;
         scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"));
         score = 0;
+        blank = new Texture("blank.png");
 
         asteroids = new ArrayList<Asteroid>();
         bullets = new ArrayList<Bullet>();
+        explosions = new ArrayList<Explosions>();
+
         playerRect = new CollisionRect(0, 0, SHIP_WIDTH, SHIP_HEIGHT);
 
         shootTimer = 0;
@@ -85,7 +97,9 @@ public class GameScreen implements Screen {
         rolls[3] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[3]);
         rolls[4] = new Animation(SHIP_ANIMATION_SPEED, rollSpriteSheet[4]);//Right
 
-
+        music = JuegoDiogenesVersionFail.manager.get("music.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
 
 
     }
@@ -143,6 +157,15 @@ public class GameScreen implements Screen {
             if (bullet.remove)
                 bulletsToRemove.add(bullet);
         }
+
+        //Update explosions
+        ArrayList<Explosions> explosionsToRemove = new ArrayList<Explosions>();
+        for (Explosions explosion : explosions) {
+            explosion.update(delta);
+            if (explosion.remove)
+                explosionsToRemove.add(explosion);
+        }
+        explosions.removeAll(explosionsToRemove);
 
 
 
@@ -229,14 +252,29 @@ public class GameScreen implements Screen {
                 if (bullet.getCollisionRect().collidesWith(asteroid.getCollisionRect())) {//Collision occured
                     bulletsToRemove.add(bullet);
                     asteroidsToRemove.add(asteroid);
+                    explosions.add(new Explosions(asteroid.getX(), asteroid.getY()));
                     score += 10;
                 }
             }
         }
 
         bullets.removeAll(bulletsToRemove);
-        asteroids.removeAll(asteroidsToRemove);
 
+
+        for (Asteroid asteroid : asteroids) {
+            if (asteroid.getCollisionRect().collidesWith(playerRect)) {
+                asteroidsToRemove.add(asteroid);
+                health -= 0.1;
+                //If health is depleted, go to game over screen
+                if (health <= 0) {
+                    this.dispose();
+                    game.setScreen(new GameOverScreen(game, score));
+                    return;
+                }
+
+            }
+        }
+        asteroids.removeAll(asteroidsToRemove);
         stateTime += delta;
 
 
@@ -256,6 +294,22 @@ public class GameScreen implements Screen {
         for (Asteroid asteroid : asteroids) {
             asteroid.render(game.batch);
         }
+
+        for (Explosions explosion : explosions) {
+            explosion.render(game.batch);
+        }
+
+        //Draw health
+        if (health > 0.6f)
+            game.batch.setColor(Color.GREEN);
+        else if (health > 0.2f)
+            game.batch.setColor(Color.ORANGE);
+        else
+            game.batch.setColor(Color.RED);
+
+        game.batch.draw(blank, 0, 0, JuegoDiogenesVersionFail.WIDTH * health, 5);
+        game.batch.setColor(Color.WHITE);
+
         game.batch.draw((TextureRegion) rolls[roll].getKeyFrame(stateTime, true), x, y, SHIP_WIDTH, SHIP_HEIGHT);
 
         game.batch.end();
