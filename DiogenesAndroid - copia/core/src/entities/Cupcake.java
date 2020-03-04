@@ -6,7 +6,7 @@ import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
 import tools.CollisionRect;
 
-public class Tacos {
+public class Cupcake {
 
     public static final int SPEED = 250;//
 
@@ -24,13 +24,13 @@ public class Tacos {
      *
      * @param x
      */
-    public Tacos(float x) {
+    public Cupcake(float x) {
         this.x = x;
         this.y = JuegoDiogenesVersionFail.HEIGHT;
         this.rect = new CollisionRect(x, y, WIDTH, HEIGHT);
 
         if (texture == null)
-            texture = new Texture("taco.png");
+            texture = new Texture("cupcake.png");
     }
 
     /**

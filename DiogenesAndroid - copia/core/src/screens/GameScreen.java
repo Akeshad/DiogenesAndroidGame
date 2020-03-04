@@ -20,7 +20,7 @@ import database.Database;
 import entities.Cookies;
 import entities.Bullet;
 import entities.Explosions;
-import entities.Tacos;
+import entities.Cupcake;
 import tools.CollisionRect;
 
 public class GameScreen implements Screen {
@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
 
     ArrayList<Bullet> bullets;//
     ArrayList<Cookies> cookies;//
-    ArrayList<Tacos> tacos;//
+    ArrayList<Cupcake> tacos;//
     ArrayList<Explosions> explosions;//
     private Music music;//
 
@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
 
         this.database = database;
 
-        tacos = new ArrayList<Tacos>();
+        tacos = new ArrayList<Cupcake>();
         cookies = new ArrayList<Cookies>();
         bullets = new ArrayList<Bullet>();
         explosions = new ArrayList<Explosions>();
@@ -175,7 +175,7 @@ public class GameScreen implements Screen {
 
             tacoSpawnTimer = random.nextFloat() * (MAX_TACO_SPAWN_TIME - MIN_TACO_SPAWN_TIME) + MIN_TACO_SPAWN_TIME;
 
-            tacos.add(new Tacos(random.nextInt(JuegoDiogenesVersionFail.WIDTH - Tacos.WIDTH))); //the taco is going to spawn from a random number around the width os the screen
+            tacos.add(new Cupcake(random.nextInt(JuegoDiogenesVersionFail.WIDTH - Cupcake.WIDTH))); //the taco is going to spawn from a random number around the width os the screen
         }
 
         //Updating cookies
@@ -187,11 +187,11 @@ public class GameScreen implements Screen {
         }
 
         //Updating tacos
-        ArrayList<Tacos> tacosToRemove = new ArrayList<Tacos>();
-        for (Tacos tacos : this.tacos) {
-            tacos.update(delta);
-            if (tacos.remove)
-                tacosToRemove.add(tacos);
+        ArrayList<Cupcake> cupcakeToRemove = new ArrayList<Cupcake>();
+        for (Cupcake cupcake : this.tacos) {
+            cupcake.update(delta);
+            if (cupcake.remove)
+                cupcakeToRemove.add(cupcake);
         }
 
 
@@ -303,12 +303,12 @@ public class GameScreen implements Screen {
                 }
             }
 
-            for (Tacos tacos : this.tacos) {
+            for (Cupcake cupcake : this.tacos) {
 
-                if (bullet.getCollisionRect().collidesWith(tacos.getCollisionRect())) {//Collision occured
+                if (bullet.getCollisionRect().collidesWith(cupcake.getCollisionRect())) {//Collision occured
                     bulletsToRemove.add(bullet);
-                    tacosToRemove.add(tacos);
-                    explosions.add(new Explosions(tacos.getX(), tacos.getY()));
+                    cupcakeToRemove.add(cupcake);
+                    explosions.add(new Explosions(cupcake.getX(), cupcake.getY()));
                     score += 40;
                 }
             }
@@ -332,9 +332,9 @@ public class GameScreen implements Screen {
         }
 
 
-        for (Tacos tacos : this.tacos) {
-            if (tacos.getCollisionRect().collidesWith(playerRect)) {
-                tacosToRemove.add(tacos);
+        for (Cupcake cupcake : this.tacos) {
+            if (cupcake.getCollisionRect().collidesWith(playerRect)) {
+                cupcakeToRemove.add(cupcake);
                 health -= 0.1;
                 //If health is depleted, go to game over screen
                 if (health <= 0) {
@@ -347,7 +347,7 @@ public class GameScreen implements Screen {
         }
 
         cookies.removeAll(cookiesToRemove);
-        tacos.removeAll(tacosToRemove);
+        tacos.removeAll(cupcakeToRemove);
         stateTime += delta;
 
 
@@ -370,8 +370,8 @@ public class GameScreen implements Screen {
             cookies.render(game.batch);
         }
 
-        for (Tacos tacos : this.tacos) {
-            tacos.render(game.batch);
+        for (Cupcake cupcake : this.tacos) {
+            cupcake.render(game.batch);
         }
 
         for (Explosions explosion : explosions) {

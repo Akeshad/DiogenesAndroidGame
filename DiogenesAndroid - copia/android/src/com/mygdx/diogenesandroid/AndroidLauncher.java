@@ -31,7 +31,7 @@ public class AndroidLauncher extends AndroidApplication {
 
 		new AlertDialog.Builder(this)
 				.setTitle("Exit Game")
-				.setMessage("Are you sure you want to close the app?")
+				.setMessage("Are you sure you want to stop playing, my sweet cookie?")
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
 					/**
@@ -43,7 +43,7 @@ public class AndroidLauncher extends AndroidApplication {
 					public void onClick(DialogInterface dialog, int which) { finish(); }
 
 				})
-				.setNegativeButton("No", null)
+				.setNegativeButton("uwu", null)
 				.show();
 
 	}

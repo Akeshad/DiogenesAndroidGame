@@ -32,7 +32,7 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Toast.makeText(this, "Prepárate para sufrir", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "This service is ready to make you diabetic", Toast.LENGTH_LONG).show();
         return START_NOT_STICKY;
 
     }
