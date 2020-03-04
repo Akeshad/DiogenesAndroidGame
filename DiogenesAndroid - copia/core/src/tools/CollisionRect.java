@@ -5,9 +5,17 @@ package tools;
  */
 public class CollisionRect {
 
-    float x, y;
-    int width, height;
+    float x, y;//
+    int width, height;//
 
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public CollisionRect (float x, float y, int width, int height) {
         this.x = x;
         this.y = y;

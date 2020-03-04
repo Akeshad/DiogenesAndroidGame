@@ -11,31 +11,41 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
+import database.Database;
 import tools.ScrollingBackground;
 
 public class GameOverScreen implements Screen {
-    private static final int BANNER_WIDTH = 350;
-    private static final int BANNER_HEIGHT = 100;
 
-    JuegoDiogenesVersionFail game;
+    private static final int BANNER_WIDTH = 350;//
+    private static final int BANNER_HEIGHT = 100;//
 
-    int score, highscore;
+    JuegoDiogenesVersionFail game;//
 
-    Texture gameOverBanner;
-    BitmapFont scoreFont;
+    int score, highscore;//
 
-    public GameOverScreen(JuegoDiogenesVersionFail game, int score) {
+    Texture gameOverBanner;//
+    BitmapFont scoreFont;//
+
+    private Database database;
+
+    /**
+     *
+     * @param game
+     * @param database
+     */
+    public GameOverScreen(JuegoDiogenesVersionFail game, int score, Database database) {
         this.game = game;
         this.score = score;
+        this.database = database;
 
         //Get highscore from save file
-        Preferences prefs = Gdx.app.getPreferences("spacegame");
-        this.highscore = prefs.getInteger("highscore", 0);
+
+        this.highscore = database.loadScore();
 
         //Check if score beats highscore
         if (score > highscore) {
-            prefs.putInteger("highscore", score);
-            prefs.flush();
+            database.saveScore(score);
+
         }
 
         //Load textures and fonts
@@ -50,6 +60,11 @@ public class GameOverScreen implements Screen {
     public void show() {
     }
 
+
+    /**
+     *
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -89,7 +104,7 @@ public class GameOverScreen implements Screen {
             if (touchX > tryAgainX && touchX < tryAgainX + tryAgainLayout.width && touchY > tryAgainY - tryAgainLayout.height && touchY < tryAgainY) {
                 this.dispose();
                 game.batch.end();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game,database));
                 return;
             }
 
@@ -97,7 +112,7 @@ public class GameOverScreen implements Screen {
             if (touchX > mainMenuX && touchX < mainMenuX + mainMenuLayout.width && touchY > mainMenuY - mainMenuLayout.height && touchY < mainMenuY) {
                 this.dispose();
                 game.batch.end();
-                game.setScreen(new DesktopMenuScreen(game));
+                game.setScreen(new DesktopMenuScreen(game, database));
                 return;
             }
         }

@@ -7,31 +7,37 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import database.Database;
 import screens.DesktopMenuScreen;
-import screens.GameOverScreen;
-import screens.GameScreen;
 import tools.GameCamera;
 import tools.ScrollingBackground;
 
 
 public class JuegoDiogenesVersionFail extends Game {
 
-	public static AssetManager manager;
-	public SpriteBatch batch;
-	public static final int WIDTH = 480;
-	public static final int HEIGHT = 720;
-	public static boolean IS_MOBILE = false;
-	public ScrollingBackground scrollingBackground;
+	public static AssetManager manager;//
+	public SpriteBatch batch;//
+	public static final int WIDTH = 480;//
+	public static final int HEIGHT = 720;//
+	public static boolean IS_MOBILE = false;//
+	private Database database;
+	public ScrollingBackground scrollingBackground;//
 
-	public GameCamera cam;
+	public GameCamera cam;//
+
+
+	public JuegoDiogenesVersionFail(Database database){
+		this.database = database;
+	}
 
 
 
 
+	/**
+	 *
+	 */
 	@Override
 	public void create () {
 
@@ -48,9 +54,12 @@ public class JuegoDiogenesVersionFail extends Game {
 
 		manager.load("music.mp3", Music.class);
 		manager.finishLoading();
-		this.setScreen(new DesktopMenuScreen(this));
+		this.setScreen(new DesktopMenuScreen(this, database));
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void render () {
 		super.render();
@@ -59,12 +68,20 @@ public class JuegoDiogenesVersionFail extends Game {
 	}
 
 
+	/**
+	 *
+	 */
 	@Override
 	public void dispose () {
 		manager.dispose();
 
 	}
 
+	/**
+	 *
+	 * @param width
+	 * @param height
+	 */
 	@Override
 	public void resize(int width, int height) {
 		cam.update(width, height);

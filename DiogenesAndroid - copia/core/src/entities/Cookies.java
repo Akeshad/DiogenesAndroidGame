@@ -7,17 +7,25 @@ import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
 import tools.CollisionRect;
 
-public class Asteroid {
-    public static final int SPEED = 250;
-    public static final int WIDTH = 16;
-    public static final int HEIGHT = 32;
-    private static Texture texture;
-    CollisionRect rect;
-    float x, y;
+public class Cookies {
 
-    public boolean remove = false;
+    public static final int SPEED = 250;//
 
-    public Asteroid (float x) {
+    public static final int WIDTH = 16;//
+    public static final int HEIGHT = 32;//
+
+    private static Texture texture;//
+    CollisionRect rect;//
+    float x, y;//
+
+    public boolean remove = false;//
+
+
+    /**
+     *
+     * @param x
+     */
+    public Cookies(float x) {
         this.x = x;
         this.y = JuegoDiogenesVersionFail.HEIGHT;
         this.rect = new CollisionRect(x, y, WIDTH, HEIGHT);
@@ -26,29 +34,52 @@ public class Asteroid {
             texture = new Texture("cookie.png");
     }
 
+    /**
+     *
+     * @param deltaTime
+     */
     public void update (float deltaTime) {
 
-        y -= SPEED * deltaTime;
+            y -= SPEED * deltaTime;
 
-        if (y < -HEIGHT)//We want to eliminate the asteroid when they leave the screen, no when they touch the bottom
+        if (y < -HEIGHT)//We want to eliminate the cookie when they leave the screen, no when they touch the bottom
             remove = true;
 
         rect.move(x, y);
 
     }
 
+
+    /**
+     *
+     * @param batch
+     */
     public void render (SpriteBatch batch) {
         batch.draw(texture, x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public CollisionRect getCollisionRect () {
         return rect;
     }
 
+
+    /**
+     *
+     * @return
+     */
     public float getX () {
         return x;
     }
 
+
+    /**
+     *
+     * @return
+     */
     public float getY () {
         return y;
     }

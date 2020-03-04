@@ -5,17 +5,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
 public class ScrollingBackground {
-    public static final int DEFAULT_SPEED = 80;
-    public static final int ACCELERATION = 50;
-    public static final int GOAL_REACH_ACCELERATION = 200;
 
-    Texture image;
-    float y1, y2;
+    public static final int DEFAULT_SPEED = 80;//
+    public static final int ACCELERATION = 50;//
+    public static final int GOAL_REACH_ACCELERATION = 200;//
+
+    Texture image;//
+    float y1, y2;//
     int speed;//In pixels / second
-    int goalSpeed;
-    float imageScale;
-    boolean speedFixed;
+    int goalSpeed;//
+    float imageScale;//
+    boolean speedFixed;//
 
+    /**
+     *
+     */
     public ScrollingBackground () {
         image = new Texture("stars_background.png");
 
@@ -27,6 +31,12 @@ public class ScrollingBackground {
         speedFixed = true;
     }
 
+
+    /**
+     *
+     * @param deltaTime
+     * @param batch
+     */
     public void updateAndRender (float deltaTime, SpriteBatch batch) {
         //Speed adjustment to reach goal
         if (speed < goalSpeed) {
@@ -57,16 +67,31 @@ public class ScrollingBackground {
         batch.draw(image, 0, y2, JuegoDiogenesVersionFail.WIDTH, image.getHeight() * imageScale);
     }
 
+
+    /**
+     *
+     * @param width
+     * @param height
+     */
     public void resize(int width, int height){
 
         imageScale = width / image.getWidth();
 
     }
 
+    /**
+     *
+     * @param goalSpeed
+     */
     public void setSpeed (int goalSpeed) {
         this.goalSpeed = goalSpeed;
     }
 
+
+    /**
+     *
+     * @param speedFixed
+     */
     public void setSpeedFixed (boolean speedFixed) {
         this.speedFixed = speedFixed;
     }

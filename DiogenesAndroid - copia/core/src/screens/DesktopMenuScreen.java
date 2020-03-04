@@ -6,30 +6,38 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
+
+import database.Database;
 import tools.ScrollingBackground;
 
 
 public class DesktopMenuScreen implements Screen {
 
-    private static final int EXIT_BUTTON_WIDTH = 250;
-    private static final int EXIT_BUTTON_HEIGHT = 120;
-    private static final int PLAY_BUTTON_WIDTH = 300;
-    private static final int PLAY_BUTTON_HEIGHT = 120;
-    private static final int EXIT_BUTTON_Y = 100;
-    private static final int PLAY_BUTTON_Y = 230;
-    private static final int LOGO_WIDTH = 400;
-    private static final int LOGO_HEIGHT = 250;
-    private static final int LOGO_Y = 450;
+    private static final int EXIT_BUTTON_WIDTH = 250;//
+    private static final int EXIT_BUTTON_HEIGHT = 120;//
+    private static final int PLAY_BUTTON_WIDTH = 300;//
+    private static final int PLAY_BUTTON_HEIGHT = 120;//
+    private static final int EXIT_BUTTON_Y = 100;//
+    private static final int PLAY_BUTTON_Y = 230;//
+    private static final int LOGO_WIDTH = 400;//
+    private static final int LOGO_HEIGHT = 250;//
+    private static final int LOGO_Y = 450;//
 
-    final JuegoDiogenesVersionFail game;
+    final JuegoDiogenesVersionFail game;//
 
-    Texture playButtonActive;
-    Texture playButtonInactive;
-    Texture exitButtonActive;
-    Texture exitButtonInactive;
-    Texture logo;
+    Texture playButtonActive;//
+    Texture playButtonInactive;//
+    Texture exitButtonActive;//
+    Texture exitButtonInactive;//
+    Texture logo;//
 
-    public DesktopMenuScreen(final JuegoDiogenesVersionFail game) {
+    private Database database;
+
+    /**
+     *
+     * @param game
+     */
+    public DesktopMenuScreen(final JuegoDiogenesVersionFail game, final Database database) {
         this.game = game;
         playButtonActive = new Texture("play_button_active.png");
         playButtonInactive = new Texture("play_button_inactive.png");
@@ -37,6 +45,7 @@ public class DesktopMenuScreen implements Screen {
         exitButtonInactive = new Texture("exit_button_inactive.png");
         logo = new Texture("logo2.png");
 
+        this.database = database;
         game.scrollingBackground.setSpeedFixed(true);
         game.scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
 
@@ -61,7 +70,7 @@ public class DesktopMenuScreen implements Screen {
                         && JuegoDiogenesVersionFail.HEIGHT - game.cam.getInputInGameWorld().y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT
                         && JuegoDiogenesVersionFail.HEIGHT - game.cam.getInputInGameWorld().y > PLAY_BUTTON_Y) {
                     menuScreen.dispose();
-                    game.setScreen(new GameScreen(game));
+                    game.setScreen(new GameScreen(game, database));
                 }
 
                 return super.touchUp(screenX, screenY, pointer, button);
@@ -75,6 +84,11 @@ public class DesktopMenuScreen implements Screen {
 
     }
 
+
+    /**
+     *
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.3f, 1);
@@ -123,6 +137,9 @@ public class DesktopMenuScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     *
+     */
     @Override
     public void dispose() {
         Gdx.input.setInputProcessor(null);
