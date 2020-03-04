@@ -23,7 +23,7 @@ public class Asteroid {
         this.rect = new CollisionRect(x, y, WIDTH, HEIGHT);
 
         if (texture == null)
-            texture = new Texture("asteroid.png");
+            texture = new Texture("cookie.png");
     }
 
     public void update (float deltaTime) {

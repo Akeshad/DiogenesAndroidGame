@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class GameScreen implements Screen {
     CollisionRect playerRect;
     Random random;
 
+
     ArrayList<Bullet> bullets;
     ArrayList<Asteroid> asteroids;
     ArrayList<Explosions> explosions;
@@ -74,6 +76,8 @@ public class GameScreen implements Screen {
         scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"));
         score = 0;
         blank = new Texture("blank.png");
+
+
 
         asteroids = new ArrayList<Asteroid>();
         bullets = new ArrayList<Bullet>();
@@ -280,7 +284,7 @@ public class GameScreen implements Screen {
         stateTime += delta;
 
 
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(42/255f,46/255f,75/255f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
@@ -315,6 +319,8 @@ public class GameScreen implements Screen {
         game.batch.setColor(Color.WHITE);
 
         game.batch.draw((TextureRegion) rolls[roll].getKeyFrame(stateTime, true), x, y, SHIP_WIDTH, SHIP_HEIGHT);
+
+
 
         game.batch.end();
 

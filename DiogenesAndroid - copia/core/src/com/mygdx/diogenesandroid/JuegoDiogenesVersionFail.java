@@ -1,8 +1,10 @@
 package com.mygdx.diogenesandroid;
 
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import screens.DesktopMenuScreen;
+import screens.GameOverScreen;
+import screens.GameScreen;
+import tools.GameCamera;
 import tools.ScrollingBackground;
 
 
@@ -19,10 +24,11 @@ public class JuegoDiogenesVersionFail extends Game {
 	public SpriteBatch batch;
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 720;
+	public static boolean IS_MOBILE = false;
 	public ScrollingBackground scrollingBackground;
 
-	private OrthographicCamera cam;
-	private StretchViewport viewport;
+	public GameCamera cam;
+
 
 
 
@@ -30,23 +36,26 @@ public class JuegoDiogenesVersionFail extends Game {
 	public void create () {
 
 		batch = new SpriteBatch();
-		this.setScreen(new DesktopMenuScreen(this));
+
 		manager = new AssetManager();
-		cam = new OrthographicCamera();
-		viewport = new StretchViewport(WIDTH, HEIGHT, cam);
-		viewport.apply();
-		cam.position.set(WIDTH / 2, HEIGHT / 2, 0);
-		cam.update();
+		cam = new GameCamera(WIDTH, HEIGHT);
+
+		if (Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS)
+			IS_MOBILE = true;
+		IS_MOBILE = true;
+
 		this.scrollingBackground = new ScrollingBackground();
 
 		manager.load("music.mp3", Music.class);
 		manager.finishLoading();
+		this.setScreen(new DesktopMenuScreen(this));
 	}
 
 	@Override
 	public void render () {
 		super.render();
-		batch.setProjectionMatrix(cam.combined);//
+		batch.setProjectionMatrix(cam.combined());
+
 	}
 
 
@@ -58,7 +67,7 @@ public class JuegoDiogenesVersionFail extends Game {
 
 	@Override
 	public void resize(int width, int height) {
-		viewport.update(width,height);
+		cam.update(width, height);
 		super.resize(width, height);
 		scrollingBackground.resize(width,height);
 	}
