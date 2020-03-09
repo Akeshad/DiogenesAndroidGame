@@ -9,11 +9,11 @@ public class Explosions {
 
     public static final float FRAME_LENGTH = 0.2f;//after this time the animation is going to finidh
     public static final int OFFSET = 8;//we need to get the position of the cookie
-    public static final int SIZE = 64;//
-    public static final int IMAGE_SIZE = 32;//
+    public static final int SIZE = 64;//the size of the Explosion
+    public static final int IMAGE_SIZE = 32;//The size of the image of the explosions
 
     private static Animation anim = null;//the animation
-    float x, y;//
+    float x, y;//floats that represents the position of the explosions
     float statetime;//
 
     public boolean remove = false;//check if we need to remove this object on the gameScreen

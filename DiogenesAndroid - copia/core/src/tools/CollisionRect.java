@@ -5,12 +5,12 @@ package tools;
  */
 public class CollisionRect {
 
-    float x, y;//
-    int width, height;//
+    float x, y;//the position of the sprite
+    int width, height;// the width and the height of the sprite
 
 
     /**
-     *
+     *The constructor os the collisionRect
      * @param x
      * @param y
      * @param width

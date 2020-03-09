@@ -19,7 +19,7 @@ public class JuegoDiogenes extends Game {
 	public void create () {
 
 		assetManager = new AssetManager();
-		assetManager.load("android/assets/graphics_packed/tiles/tilepack.atlas", TextureAtlas.class);
+		assetManager.load("graphics_packed/tiles/tilepack.atlas", TextureAtlas.class);
 		assetManager.finishLoading();
 		screen = new GameScreen(this);
 		this.setScreen(screen);

@@ -16,8 +16,13 @@ public class Bullet {
     CollisionRect rect;//A collisionRect that detects is there is a collision with another entity
     public boolean remove = false;//Is going to check if the object should be remove from the list
 
-    float x, y;//
+    float x, y;//the position of the bullet
 
+
+    /**
+     * This function is the Bullet´s constructor
+     * @param x
+     */
     public Bullet(float x) {
         this.x = x;
         this.y = y;
@@ -43,7 +48,7 @@ public class Bullet {
     }
 
     /**
-     *
+     *This function renders the texture of the bullet
      * @param batch
      */
     public void render (SpriteBatch batch) {
@@ -52,7 +57,7 @@ public class Bullet {
     }
 
     /**
-     *
+     *This function returns the CollisionRect of the bullet
      * @return a CollisionRect
      */
     public CollisionRect getCollisionRect () {

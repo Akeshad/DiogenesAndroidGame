@@ -9,20 +9,20 @@ import tools.CollisionRect;
 
 public class Cookies {
 
-    public static final int SPEED = 250;//
+    public static final int SPEED = 250;//the speed of the bullet movement
 
-    public static final int WIDTH = 16;//
-    public static final int HEIGHT = 32;//
+    public static final int WIDTH = 16;//the width of the bullet
+    public static final int HEIGHT = 32;//The height of the bullet
 
-    private static Texture texture;//
-    CollisionRect rect;//
-    float x, y;//
+    private static Texture texture;//The texture of the bullet
+    CollisionRect rect;//A collisionRect that detects is there is a collision with another entity
+    float x, y;//the position of the bullet
 
-    public boolean remove = false;//
+    public boolean remove = false;//Is going to check if the object should be remove from the list
 
 
     /**
-     *
+     *This function is the Cookies´s constructor
      * @param x
      */
     public Cookies(float x) {
@@ -35,7 +35,7 @@ public class Cookies {
     }
 
     /**
-     *
+     *This function updates the position of the Cookies
      * @param deltaTime
      */
     public void update (float deltaTime) {
@@ -51,7 +51,7 @@ public class Cookies {
 
 
     /**
-     *
+     *This function renders the image if the Cookies
      * @param batch
      */
     public void render (SpriteBatch batch) {
@@ -59,7 +59,7 @@ public class Cookies {
     }
 
     /**
-     *
+     *This function returns the CollisionRect of the Cookies
      * @return
      */
     public CollisionRect getCollisionRect () {
@@ -68,7 +68,7 @@ public class Cookies {
 
 
     /**
-     *
+     *This function returns the x position of the Cookies
      * @return
      */
     public float getX () {
@@ -77,7 +77,7 @@ public class Cookies {
 
 
     /**
-     *
+     *This function returns the y position of the Cookies
      * @return
      */
     public float getY () {

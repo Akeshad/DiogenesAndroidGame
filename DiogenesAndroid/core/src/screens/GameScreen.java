@@ -34,7 +34,7 @@ public class GameScreen extends AbstractScreen {
         playerFemaleSouth = new Texture("sprites/playerFemale.png");
         batch = new SpriteBatch();
 
-        TextureAtlas atlas = app.getAssetManager().get("android/assets/graphics_packed/tiles/tilepack.atlas", TextureAtlas.class);
+        TextureAtlas atlas = app.getAssetManager().get("graphics_packed/tiles/tilepack.atlas", TextureAtlas.class);
         Animation walksNorth;
 
         Animation walksSouth;

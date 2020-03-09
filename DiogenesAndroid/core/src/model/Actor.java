@@ -150,6 +150,7 @@ public class Actor {
     }
 
     public TextureRegion getSprite(){
+
         if( state == ACTOR_STATE.WALKING){
 
             return (TextureRegion) animations.getWalking(facing).getKeyFrame(walkTimer);

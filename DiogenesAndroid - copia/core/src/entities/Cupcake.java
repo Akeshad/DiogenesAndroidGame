@@ -8,20 +8,20 @@ import tools.CollisionRect;
 
 public class Cupcake {
 
-    public static final int SPEED = 250;//
+    public static final int SPEED = 250;//Constant int that represents the speed of the Cupcake movement
 
-    public static final int WIDTH = 16;//
-    public static final int HEIGHT = 32;//
+    public static final int WIDTH = 16;//Constant int that represents the width of the Cupcake
+    public static final int HEIGHT = 32;//Constant int that represents the height of the Cupcake
 
-    private static Texture texture;//
-    CollisionRect rect;//
-    float x, y;//
+    private static Texture texture;//The texture of the Cupcake
+    CollisionRect rect;//A collisionRect that detects is there is a collision with another entity
+    float x, y;//the position of the Cupcake
 
-    public boolean remove = false;//
+    public boolean remove = false;//Is going to check if the object should be remove from the list
 
 
     /**
-     *
+     *This function is the Cupcake´s constructor
      * @param x
      */
     public Cupcake(float x) {
@@ -34,7 +34,7 @@ public class Cupcake {
     }
 
     /**
-     *
+     *This function updates the position of the Cupcake
      * @param deltaTime
      */
     public void update (float deltaTime) {
@@ -50,7 +50,7 @@ public class Cupcake {
 
 
     /**
-     *
+     *This function renders the image if the Cupcake
      * @param batch
      */
     public void render (SpriteBatch batch) {
@@ -58,7 +58,7 @@ public class Cupcake {
     }
 
     /**
-     *
+     *This function returns the CollisionRect of the Cupcake
      * @return
      */
     public CollisionRect getCollisionRect () {
@@ -67,7 +67,7 @@ public class Cupcake {
 
 
     /**
-     *
+     *This function returns the x position of the Cupcake
      * @return
      */
     public float getX () {
@@ -76,7 +76,7 @@ public class Cupcake {
 
 
     /**
-     *
+     *This function returns the y position of the Cupcake
      * @return
      */
     public float getY () {

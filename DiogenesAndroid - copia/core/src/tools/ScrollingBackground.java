@@ -6,23 +6,22 @@ import com.mygdx.diogenesandroid.JuegoDiogenesVersionFail;
 
 public class ScrollingBackground {
 
-    public static final int DEFAULT_SPEED = 80;//
-    public static final int ACCELERATION = 50;//
-    public static final int GOAL_REACH_ACCELERATION = 200;//
+    public static final int DEFAULT_SPEED = 80;//the speed of the starts of the background
+    public static final int ACCELERATION = 50;//the acceleration of the starts of the background
+    public static final int GOAL_REACH_ACCELERATION = 200;//the acceleration goal of the starts of the background
 
-    Texture image;//
+    Texture image;//the image of the background
     float y1, y2;//
     int speed;//In pixels / second
-    int goalSpeed;//
-    float imageScale;//
-    boolean speedFixed;//
+    int goalSpeed;//int that represents the acceleration goal of the starts of the background
+    float imageScale;//float that represents the scale of the image
+    boolean speedFixed;//boolean that represent if the speed is fixed
 
     /**
-     *
+     *Constructor of the ScrollingBackground
      */
     public ScrollingBackground () {
         image = new Texture("stars_background.png");
-
         y1 = 0;
         y2 = image.getHeight();
         speed = 0;
@@ -33,7 +32,7 @@ public class ScrollingBackground {
 
 
     /**
-     *
+     *This function update and render the stars of the background
      * @param deltaTime
      * @param batch
      */
@@ -69,7 +68,7 @@ public class ScrollingBackground {
 
 
     /**
-     *
+     *This function resize the image with the correct scale
      * @param width
      * @param height
      */
@@ -80,7 +79,7 @@ public class ScrollingBackground {
     }
 
     /**
-     *
+     *This function sets the goalSpeed
      * @param goalSpeed
      */
     public void setSpeed (int goalSpeed) {
@@ -89,7 +88,7 @@ public class ScrollingBackground {
 
 
     /**
-     *
+     *This function sets the speedFixed
      * @param speedFixed
      */
     public void setSpeedFixed (boolean speedFixed) {
