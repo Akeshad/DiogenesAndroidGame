@@ -13,28 +13,29 @@ import tools.ScrollingBackground;
 
 public class DesktopMenuScreen implements Screen {
 
-    private static final int EXIT_BUTTON_WIDTH = 250;//
-    private static final int EXIT_BUTTON_HEIGHT = 120;//
-    private static final int PLAY_BUTTON_WIDTH = 300;//
-    private static final int PLAY_BUTTON_HEIGHT = 120;//
-    private static final int EXIT_BUTTON_Y = 100;//
-    private static final int PLAY_BUTTON_Y = 230;//
-    private static final int LOGO_WIDTH = 400;//
-    private static final int LOGO_HEIGHT = 250;//
-    private static final int LOGO_Y = 450;//
+    private static final int EXIT_BUTTON_WIDTH = 250;//The width of the exit button
+    private static final int EXIT_BUTTON_HEIGHT = 120;//The height of the exit button
+    private static final int PLAY_BUTTON_WIDTH = 300;//The width of the play button
+    private static final int PLAY_BUTTON_HEIGHT = 120;//The height of the play button
+    private static final int EXIT_BUTTON_Y = 100;//The position of the exit button
+    private static final int PLAY_BUTTON_Y = 230;//The position of the play button
+    private static final int LOGO_WIDTH = 400;//The width of the logo button
+    private static final int LOGO_HEIGHT = 250;//The height of the logo button
+    private static final int LOGO_Y = 450;//The position of the exit button
 
-    final JuegoDiogenesVersionFail game;//
+    final JuegoDiogenesVersionFail game;//a JuegoDiogenesVersionFail that is going to be played
 
-    Texture playButtonActive;//
-    Texture playButtonInactive;//
-    Texture exitButtonActive;//
-    Texture exitButtonInactive;//
-    Texture logo;//
+    Texture playButtonActive;//The texture os the play button when is activate
+    Texture playButtonInactive;//The texture os the play button when is inactivate
+    Texture exitButtonActive;//The texture os the exit button when is activate
+    Texture exitButtonInactive;//The texture os the exit button when is inactivate
+    Texture logo;//The texture os the logo
 
-    private Database database;
+    private Database database;//The database of the game
 
     /**
-     *
+     *The constructor of the DesktopMenuScreen
+     * @param database
      * @param game
      */
     public DesktopMenuScreen(final JuegoDiogenesVersionFail game, final Database database) {

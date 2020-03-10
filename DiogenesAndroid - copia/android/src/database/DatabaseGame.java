@@ -13,6 +13,10 @@ public class DatabaseGame implements Database {
         openHelper=new BDOpenHelper(c,1);
     }
 
+    /**
+     * This function is going to return an int that represents the score of the player
+     * @return
+     */
     @Override
     public int loadScore() {
         SQLiteDatabase db=openHelper.getWritableDatabase();
@@ -27,6 +31,10 @@ public class DatabaseGame implements Database {
         }
     }
 
+    /**
+     *Add the new score to the database
+     * @param newScore
+     */
     @Override
     public void saveScore(int newScore) {
         SQLiteDatabase db=openHelper.getWritableDatabase();

@@ -19,7 +19,7 @@ public class Explosions {
     public boolean remove = false;//check if we need to remove this object on the gameScreen
 
     /**
-     *
+     *This is the constructor of the explosions
      * @param x
      * @param y
      */
@@ -34,7 +34,7 @@ public class Explosions {
 
 
     /**
-     *
+     *This function updates the explosion
      * @param deltatime
      */
     public void update (float deltatime) {
@@ -44,7 +44,7 @@ public class Explosions {
     }
 
     /**
-     *
+     *This function renders the explosion
      * @param batch
      */
     public void render (SpriteBatch batch) {

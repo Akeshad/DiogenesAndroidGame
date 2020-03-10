@@ -26,15 +26,15 @@ import tools.CollisionRect;
 public class GameScreen implements Screen {
 
 
-    public static final float SPEED = 300;//
+    public static final float SPEED = 300;//the speed of the ship
 
     public static final float SHIP_ANIMATION_SPEED = 0.5f;//
 
     public static final float ROLL_TIMER_SWITCH_TIME = 0.25f;//How much time it takes between each roll of the ship
-    public static final float SHOOT_WAIT_TIME = 0.3f;//
+    public static final float SHOOT_WAIT_TIME = 0.3f;// the time that have to pass between each shoot
 
-    public static final int SHIP_WIDTH_PIXEL = 17;//
-    public static final int SHIP_HEIGHT_PIXEL = 32;//
+    public static final int SHIP_WIDTH_PIXEL = 17;//The pixels of the width of the ship
+    public static final int SHIP_HEIGHT_PIXEL = 32;//The pixels of the height of the ship
 
     public static final int SHIP_WIDTH = SHIP_WIDTH_PIXEL * 3;//
     public static final int SHIP_HEIGHT = SHIP_HEIGHT_PIXEL * 3;//
@@ -162,20 +162,20 @@ public class GameScreen implements Screen {
 
         //Adding cookies spawns
         cookieSpawnTimer -= delta;
-        if (cookieSpawnTimer <= 0) { //if this hanpends we need to reset it and create new cookies
+        if (cookieSpawnTimer <= 0) { //if this happens we need to reset it and create new cookies
 
             cookieSpawnTimer = random.nextFloat() * (MAX_COOKIE_SPAWN_TIME - MIN_COOKIE_SPAWN_TIME) + MIN_COOKIE_SPAWN_TIME;
 
             cookies.add(new Cookies(random.nextInt(JuegoDiogenesVersionFail.WIDTH - Cookies.WIDTH))); //the cookie is going to spawn from a random number around the width os the screen
         }
 
-        //Adding tacos spawns
+        //Adding cupcakes spawns
         tacoSpawnTimer -= delta;
-        if (tacoSpawnTimer <= 0) { //if this hanpends we need to reset it and create new taco
+        if (tacoSpawnTimer <= 0) { //if this hanpends we need to reset it and create new cupcake
 
             tacoSpawnTimer = random.nextFloat() * (MAX_TACO_SPAWN_TIME - MIN_TACO_SPAWN_TIME) + MIN_TACO_SPAWN_TIME;
 
-            tacos.add(new Cupcake(random.nextInt(JuegoDiogenesVersionFail.WIDTH - Cupcake.WIDTH))); //the taco is going to spawn from a random number around the width os the screen
+            tacos.add(new Cupcake(random.nextInt(JuegoDiogenesVersionFail.WIDTH - Cupcake.WIDTH))); //the cupcake is going to spawn from a random number around the width os the screen
         }
 
         //Updating cookies
@@ -401,32 +401,32 @@ public class GameScreen implements Screen {
 
 
     /**
-     *
-     * @return
+     *This function returns the input of the user in the device
+     * @return The ship's right movement, be it either by keyboard or touchscreen device
      */
     private boolean isRight () {
         return Gdx.input.isKeyPressed(Input.Keys.RIGHT) || (Gdx.input.isTouched() && Gdx.input.getX() >= JuegoDiogenesVersionFail.WIDTH / 2);
     }
 
     /**
-     *
-     * @return
+     *This function returns the input of the user in the device
+     * @return The ship's left movement, be it either by keyboard or touchscreen device
      */
     private boolean isLeft () {
         return Gdx.input.isKeyPressed(Input.Keys.LEFT) || (Gdx.input.isTouched() &&  Gdx.input.getX() < JuegoDiogenesVersionFail.WIDTH / 2);
     }
 
     /**
-     *
-     * @return
+     *This function returns the input of the user in the device
+     * @return The ship's right movement, be it either by keyboard or touchscreen device
      */
     private boolean isJustRight () {
         return Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || (Gdx.input.justTouched() && Gdx.input.getX() >= JuegoDiogenesVersionFail.WIDTH / 2);
     }
 
     /**
-     *
-     * @return
+     *This function returns the input of the user in the device
+     * @return The ship's left movement, be it either by keyboard or touchscreen device
      */
     private boolean isJustLeft () {
         return Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || (Gdx.input.justTouched() &&  Gdx.input.getX()< JuegoDiogenesVersionFail.WIDTH / 2);
